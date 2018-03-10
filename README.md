@@ -1,2 +1,2 @@
 # jira-updates-filter
-receive updates from Jira, filter them based on component for our team, and pass them along to Slack
+Jira webhooks can be configured using customized JQL queries to send issue updates that meet particular criteria, while the Slack integration for Jira cannot. This webtask is a webhook endpoint that transforms the Jira payload into a Slack message and passes it along.
