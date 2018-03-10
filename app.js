@@ -1,12 +1,41 @@
-var express    = require('express');
-var Webtask    = require('webtask-tools');
-var bodyParser = require('body-parser');
-var app = express();
+var SlackNotify = require('slack-notify');
+const SLACKBOT_NAME = 'JIRA Updates';
+const SLACKBOT_ICON = 'https://a.slack-edge.com/7f1a0/plugins/jira/assets/service_512.png';
 
-app.use(bodyParser.json());
+const isJiraUpdateSupported = (data) => {
+  if (data.user && data.issue && data.transition)
+  {
+    return true;
+  }
+}
 
-app.post('/', function (req, res) {
-  res.sendStatus(200);
-});
+const buildSlackMessage = (data) => {
+  return '*' + data.user.displayName + '*'
+    + ' updated <' 
+    + data.issue.self
+    + '|'
+    + data.issue.key
+    + ': ' + data.issue.fields.summary
+    + '>'
+}
 
-module.exports = Webtask.fromExpress(app);
+const postToSlack = (url, text) => {
+  var webhook = SlackNotify(url);
+  webhook.send({
+    icon_url: SLACKBOT_ICON,
+    text: text,
+    username: SLACKBOT_NAME
+  });
+}
+
+module.exports = function (context, callback) {
+  if (isJiraUpdateSupported(context.data))
+  {
+      var text = buildSlackMessage(context.data);
+      postToSlack(context.secrets.SLACK_WEBHOOK_URL, text);
+      callback(null, 'Success');
+      return;
+  }
+
+  callback('This update is not supported');
+}
