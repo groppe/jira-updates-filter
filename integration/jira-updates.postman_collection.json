@@ -1,0 +1,78 @@
+{
+	"info": {
+		"name": "Jira Updates",
+		"_postman_id": "2f651726-5608-4fb1-86e8-6a11b7aef7c7",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Empty Update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7b8166dc-e008-44fb-8f8d-19ca581a7e15",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "{{URL}}",
+					"host": [
+						"{{URL}}"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Update with Payload",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8bcfed03-789e-4a87-8748-46f8f2d97c32",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"issue\": {\n        \"self\": \"https://snagajob.atlassian.net/browse/DM-360\",\n        \"key\": \"OVR-9000\",\n        \"fields\": {\n        \"summary\": \"SUPER SAYAN\"\n        }\n    },\n    \"user\": {\n        \"displayName\": \"Son Goku\"\n    },\n    \"transition\": {\n\n    }\n}"
+				},
+				"url": {
+					"raw": "{{URL}}",
+					"host": [
+						"{{URL}}"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
