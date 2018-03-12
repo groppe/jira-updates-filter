@@ -29,7 +29,7 @@ const postToSlack = (url, text) => {
 }
 
 module.exports = function (context, callback) {
-  console.log(context);
+  console.log(context.data);
   if (isJiraUpdateSupported(context.data))
   {
       var text = buildSlackMessage(context.data);
