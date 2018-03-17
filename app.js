@@ -3,9 +3,7 @@ const SLACKBOT_NAME = 'JIRA Updates';
 const SLACKBOT_ICON = 'https://a.slack-edge.com/7f1a0/plugins/jira/assets/service_512.png';
 
 const isJiraUpdateSupported = (data) => {
-  console.log(data.self);
-  console.log(data.issue);
-  if (data.updateAuthor && data.issue)
+  if (data.issue && (data.comment || data.user))
   {
     return true;
   }
