@@ -10,13 +10,19 @@ const isJiraUpdateSupported = (data) => {
 }
 
 const buildSlackMessage = (data) => {
-  return '*' + data.updateAuthor.displayName + '*'
+  var issue = data.issue,
+      user = data.user ? data.user.displayName : data.comment.updateAuthor.displayName;
+  return formatMessage(issue, user);
+}
+
+const formatMessage = (issue, user) => {
+  return '*' + user + '*'
     + ' updated <' 
-    + data.issue.self
+    + issue.self
     + '|'
-    + data.issue.key
-    + ': ' + data.issue.fields.summary
-    + '>'
+    + issue.key
+    + ': ' + issue.fields.summary
+    + '>';
 }
 
 const postToSlack = (url, text) => {
