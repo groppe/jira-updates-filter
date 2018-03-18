@@ -1,1 +1,6 @@
 language: node_js
+node_js:
+  - "node"
+  - "9"
+
+before_script: newman run integration/jira-updates.postman_collection -e integration/webtask.postman_environment.json
