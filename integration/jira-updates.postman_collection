@@ -62,7 +62,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n   \"issue\": {\n        \"self\": \"https://a.jira.issue.com\",\n        \"key\": \"OVR-9000\",\n        \"fields\": {\n        \"summary\": \"SUPER SAYAN\"\n        }\n    },\n    \"user\": {\n        \"displayName\": \"Son Goku\"\n    },\n    \"transition\": {\n\n    }\n}"
+					"raw": "{\n   \"issue\": {\n        \"self\": \"https://a.jira.issue.com\",\n        \"key\": \"OVR-9000\",\n        \"fields\": {\n        \"summary\": \"SUPER SAYAN\"\n        }\n    },\n    \"user\": {\n        \"displayName\": \"Son Goku\"\n    }\n}"
 				},
 				"url": {
 					"raw": "{{URL}}",
