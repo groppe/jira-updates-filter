@@ -1,53 +1,89 @@
 var expect = require("chai").expect;
-var jiraUpdatesHander = require("../app");
+var JiraUpdates = require('../jira-updates');
 
-var testData = {
-    'issue': {
-        'self': 'https://snagajob.atlassian.net/browse/DM-360',
-        'key': 'OVR-9000',
-        'fields': {
+var issue = {
+    'self': 'https://business.atlassian.net/browse/DB-360',
+    'key': 'OVR-9000',
+    'fields': {
         'summary': 'SUPER SAYAN'
-        }
-    },
-    'user': {
+    }
+},
+user = {
+    'displayName': 'Son Goku'
+},
+comment = {
+    'updateAuthor': {
         'displayName': 'Son Goku'
     },
-    'transition': {
-
-    }
 };
 
-var testContext = {
-    'data': testData,
-    'secrets': {
-        'SLACK_WEBHOOK_URL': 'test_url'
-    }
-};
+describe("Jira Update", function() {
+    describe("isJiraUpdateSupported", function() {
+        it("When issue and user are part of the data, returns true", function() {
+            // Arrange
+            var testData = {
+                'issue': issue,
+                'user': user
+            };
 
-describe("Jira Updates Filter", function() {
-    describe("Support Check", function() {
-        it("No error is returned when issue, user, and transition are part of the data", function() {
-            jiraUpdatesHander(testContext, function(error, message) {
-                expect(error).to.be.null;
-            });
+            // Act
+            var result = JiraUpdates.isJiraUpdateSupported(testData);
+
+            // Assert
+            expect(result).to.be.true;
         });
-        it("An error is returned when issue data is null", function() {
-            testContext.data.user = null;
-            jiraUpdatesHander(testContext, function(error, message) {
-                expect(error).to.not.be.null;
-            });
+        it("When issue and comment are a part of the data, returns true", function() {
+            // Arrange
+            var testData = {
+                'issue': comment,
+                'user': user
+            };
+
+            // Act
+            var result = JiraUpdates.isJiraUpdateSupported(testData);
+
+            // Assert
+            expect(result).to.be.true;
         });
-        it("An error is returned when user data is null", function() {
-            testContext.data.user = null;
-            jiraUpdatesHander(testContext, function(error, message) {
-                expect(error).to.not.be.null;
-            });
+        it("When neither user nor comment are part of the data, returns false", function() {
+            // Arrange
+            var testData = {
+                'user': user
+            };
+
+            // Act
+            var result = JiraUpdates.isJiraUpdateSupported(testData);
+
+            // Assert
+            expect(result).to.be.false;
         });
-        it("An error is returned when transition data is null", function() {
-            testContext.data.user = null;
-            jiraUpdatesHander(testContext, function(error, message) {
-                expect(error).to.not.be.null;
-            });
+    });
+    describe("buildSlackMessage", function() {
+        it("When issue and user are included in the data, message successfully built.", function() {
+            // Arrange
+            var testData = {
+                'user': user,
+                'issue': issue
+            };
+
+            // Act
+            var message = JiraUpdates.buildSlackMessage(testData);
+
+            // Assert
+            expect(message).to.equal('*Son Goku* updated <https://business.atlassian.net/browse/DB-360|OVR-9000: SUPER SAYAN>');
+        });
+        it("When issue and comment are included in the data, message successfully built.", function() {
+            // Arrange
+            var testData = {
+                'issue': issue,
+                'comment': comment
+            };
+
+            // Act
+            var message = JiraUpdates.buildSlackMessage(testData);
+
+            // Assert
+            expect(message).to.equal('*Son Goku* updated <https://business.atlassian.net/browse/DB-360|OVR-9000: SUPER SAYAN>');
         });
     });
 });
